@@ -103,12 +103,13 @@ CPU architecture is detected for each OS accordingly:
 
 ## Disclaimer
 
-This is a simpel clone of https://github.com/robertpeteuil/terraform-installer.
+This is a simpel clone of https://github.com/robertpeteuil/terraform-installer.  
 Only thing I did was a search&replace to consul.
 
 All credits belong to Robert Peteuil
 
 ## License
 
-Apache 2.0 License - Copyright (c) 2020    Robert Peteuil
-Apache 2.0 License - Copyright (c) 2021    Henry Paulissen
+Apache 2.0 License - Copyright (c) 2020    Robert Peteuil  
+Apache 2.0 License - Copyright (c) 2021    Henry Paulissen  
+
