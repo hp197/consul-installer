@@ -1,18 +1,18 @@
-# Installer for HashiCorp Terraform - Automated Installation
+# Installer for HashiCorp Consul - Automated Installation
 
 ## Automatically Download, Extract and Install Latest or Specific Version
 
-[![release](https://img.shields.io/github/release/robertpeteuil/terraform-installer.svg?colorB=2067b8)](https://github.com/robertpeteuil/terraform-installer)
-[![bash](https://img.shields.io/badge/language-bash-89e051.svg?style=flat-square)](https://github.com/robertpeteuil/terraform-installer)
-[![license](https://img.shields.io/github/license/robertpeteuil/terraform-installer.svg?colorB=2067b8)](https://github.com/robertpeteuil/terraform-installer)
+[![release](https://img.shields.io/github/release/hp197/consul-installer.svg?colorB=2067b8)](https://github.com/hp197/consul-installer)
+[![bash](https://img.shields.io/badge/language-bash-89e051.svg?style=flat-square)](https://github.com/hp197/consul-installer)
+[![license](https://img.shields.io/github/license/hp197/consul-installer.svg?colorB=2067b8)](https://github.com/hp197/consul-installer)
 
 ---
 
-The **terraform-install** script automates the process of downloading and installing Terraform.  It provides an ideal method for installing installing updates or a specific version.
+The **consul-install** script automates the process of downloading and installing Consul.  It provides an ideal method for installing installing updates or a specific version.
 
 This script detects the latest version, OS and CPU-Architecture and allows installation to local or system locations.  Optional parameters allow installing a specific version and installing to /usr/local/bin without prompting.
 
-Example - install last pre-0.13 release: `./terraform-install.sh -i 0.12.29`
+Example - install last pre-0.13 release: `./consul-install.sh -i 0.12.29`
 
 Options:
 
@@ -25,31 +25,34 @@ Options:
 - `-h`:          help
 - `-v`:          display version
 
-This installer is similar to my [Packer Installer](https://github.com/robertpeteuil/packer-installer) and [Vault Installer](https://github.com/robertpeteuil/vault-installer)
+This installer is similar to:
+- [Packer Installer](https://github.com/robertpeteuil/packer-installer)
+- [Vault Installer](https://github.com/robertpeteuil/vault-installer)
+- [Terraform Installer](https://github.com/robertpeteuil/terraform-installer)
 
 ## Download and Use Locally
 
 Download Installer
 
 ``` shell
-curl -LO https://raw.github.com/robertpeteuil/terraform-installer/master/terraform-install.sh
-chmod +x terraform-install.sh
+curl -LO https://raw.github.com/hp197/consul-installer/master/consul-install.sh
+chmod +x consul-install.sh
 ```
 
 Download installer via my bootstrap server (iac.sh or https://iac.sh)
 
 ``` shell
-curl iac.sh/terraform > getinst.sh
+curl iac.sh/consul > getinst.sh
 bash getinst.sh
-# installer downloaded as terraform-install.sh in current directory
+# installer downloaded as consul-install.sh in current directory
 ```
 
 ### Run local installer
 
 ``` shell
-./terraform-install.sh
+./consul-install.sh
 
-# usage: terraform-install.sh [-i VERSION] [-a] [-c] [-h] [-v]
+# usage: consul-install.sh [-i VERSION] [-a] [-c] [-h] [-v]
 #      -i VERSION	: specify version to install in format '' (OPTIONAL)
 #      -a		: automatically use sudo to install to /usr/local/bin
 #      -c		: leave binary in working directory (for CI/DevOps use)
@@ -60,7 +63,7 @@ bash getinst.sh
 ## System Requirements
 
 - System with Bash Shell (Linux, macOS, Windows Subsystem for Linux)
-- `unzip` - terraform downloads are in zip format
+- `unzip` - consul downloads are in zip format
 - `curl` or `wget` - script will use either one to retrieve metadata and download
 
 Optional
@@ -79,7 +82,7 @@ Optional
 - Calculates Download URL based on Version, OS and CPU-Architecture
 - Verifies URL Validity before Downloading in Case:
   - VERSION incorrectly specified with `-i`
-  - Download URL Format Changed on terraform Website
+  - Download URL Format Changed on consul Website
 - Determines Install Destination
   - The destination can be specified with `-c` option, or passing `TF_INSTALL_DIR` environment variable
   - The default is `/usr/local/bin` if it is writable, or with `-a`
@@ -100,8 +103,12 @@ CPU architecture is detected for each OS accordingly:
 
 ## Disclaimer
 
-I am a HashiCorp employee, but this is a personal project and not officially endorsed or supported by HashiCorp.
+This is a simpel clone of https://github.com/robertpeteuil/terraform-installer.
+Only thing I did was a search&replace to consul.
+
+All credits belong to Robert Peteuil
 
 ## License
 
 Apache 2.0 License - Copyright (c) 2020    Robert Peteuil
+Apache 2.0 License - Copyright (c) 2021    Henry Paulissen

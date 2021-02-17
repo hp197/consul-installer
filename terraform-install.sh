@@ -2,20 +2,21 @@
 
 set -e
 
-# TERRAFORM INSTALLER - Automated Terraform Installation
+# CONSUL INSTALLER - Automated Terraform Installation
 #   Apache 2 License - Copyright (c) 2018  Robert Peteuil  @RobertPeteuil
+#   Apache 2 License - Copyright (c) 2021  Henry Paulissen @hp197
 #
 #     Automatically Download, Extract and Install
-#        Latest or Specific Version of Terraform
+#        Latest or Specific Version of Consul
 #
-#   from: https://github.com/robertpeteuil/terraform-installer
+#   from: https://github.com/hp197/consul-installer
 
 # Uncomment line below to always use 'sudo' to install to /usr/local/bin/
 # sudoInstall=true
 
 scriptname=$(basename "$0")
-scriptbuildnum="1.5.4"
-scriptbuilddate="2020-06-25"
+scriptbuildnum="1.0"
+scriptbuilddate="2021-02-17"
 
 # CHECK DEPENDANCIES AND SET NET RETRIEVAL TOOL
 if ! unzip -h 2&> /dev/null; then
@@ -41,7 +42,7 @@ displayVer() {
 }
 
 usage() {
-  [[ "$1" ]] && echo -e "Download and Install Terraform - Latest Version unless '-i' specified\n"
+  [[ "$1" ]] && echo -e "Download and Install Consul - Latest Version unless '-i' specified\n"
   echo -e "usage: ${scriptname} [-i VERSION] [-a] [-c] [-h] [-v]"
   echo -e "     -i VERSION\t: specify version to install in format '0.11.8' (OPTIONAL)"
   echo -e "     -a\t\t: automatically use sudo to install to /usr/local/bin (or \$TF_INSTALL_DIR)"
@@ -55,17 +56,17 @@ getLatest() {
   case "${nettool}" in
     # jq installed - parse version from hashicorp website
     wgetjq)
-      LATEST_ARR=($(wget -q -O- https://releases.hashicorp.com/index.json 2>/dev/null | jq -r '.terraform.versions[].version' | sort -t. -k 1,1nr -k 2,2nr -k 3,3nr))
+      LATEST_ARR=($(wget -q -O- https://releases.hashicorp.com/index.json 2>/dev/null | jq -r '.consul.versions[].version' | sort -t. -k 1,1nr -k 2,2nr -k 3,3nr))
       ;;
     curljq)
-      LATEST_ARR=($(curl -s https://releases.hashicorp.com/index.json 2>/dev/null | jq -r '.terraform.versions[].version' | sort -t. -k 1,1nr -k 2,2nr -k 3,3nr))
+      LATEST_ARR=($(curl -s https://releases.hashicorp.com/index.json 2>/dev/null | jq -r '.consul.versions[].version' | sort -t. -k 1,1nr -k 2,2nr -k 3,3nr))
       ;;
     # parse version from github API
     wget)
-      LATEST_ARR=($(wget -q -O- https://api.github.com/repos/hashicorp/terraform/releases 2> /dev/null | awk '/tag_name/ {print $2}' | cut -d '"' -f 2 | cut -d 'v' -f 2))
+      LATEST_ARR=($(wget -q -O- https://api.github.com/repos/hashicorp/consul/releases 2> /dev/null | awk '/tag_name/ {print $2}' | cut -d '"' -f 2 | cut -d 'v' -f 2))
       ;;
     curl)
-      LATEST_ARR=($(curl -s https://api.github.com/repos/hashicorp/terraform/releases 2> /dev/null | awk '/tag_name/ {print $2}' | cut -d '"' -f 2 | cut -d 'v' -f 2))
+      LATEST_ARR=($(curl -s https://api.github.com/repos/hashicorp/consul/releases 2> /dev/null | awk '/tag_name/ {print $2}' | cut -d '"' -f 2 | cut -d 'v' -f 2))
       ;;
   esac
 
@@ -108,12 +109,12 @@ if [[ "$OS" == "linux" ]]; then
 else
   PROC="amd64"
 fi
-[[ $PROC =~ arm ]] && PROC="arm"  # terraform downloads use "arm" not full arm type
+#[[ $PROC =~ arm ]] && PROC="arm"  # consul downloads use "arm" not full arm type
 
 # CREATE FILENAME AND URL FROM GATHERED PARAMETERS
-FILENAME="terraform_${VERSION}_${OS}_${PROC}.zip"
-LINK="https://releases.hashicorp.com/terraform/${VERSION}/${FILENAME}"
-SHALINK="https://releases.hashicorp.com/terraform/${VERSION}/terraform_${VERSION}_SHA256SUMS"
+FILENAME="consul_${VERSION}_${OS}_${PROC}.zip"
+LINK="https://releases.hashicorp.com/consul/${VERSION}/${FILENAME}"
+SHALINK="https://releases.hashicorp.com/consul/${VERSION}/consul_${VERSION}_SHA256SUMS"
 
 # TEST CALCULATED LINKS
 case "${nettool}" in
@@ -161,7 +162,7 @@ elif [[ "$sudoInstall" ]]; then
   CMDPREFIX="sudo "
   STREAMLINED=true
 else
-  echo -e "Terraform Installer\n"
+  echo -e "Consul Installer\n"
   echo "Specify install directory (a,b or c):"
   echo -en "\t(a) '~/bin'    (b) '/usr/local/bin' as root    (c) abort : "
   read -r -n 1 SELECTION
@@ -180,7 +181,7 @@ fi
 # CREATE TMPDIR FOR EXTRACTION
 if [[ ! "$cwdInstall" ]]; then
   TMPDIR=${TMPDIR:-/tmp}
-  UTILTMPDIR="terraform_${VERSION}"
+  UTILTMPDIR="consul_${VERSION}"
 
   cd "$TMPDIR" || exit 1
   mkdir -p "$UTILTMPDIR"
@@ -217,15 +218,15 @@ unzip -qq "$FILENAME" || exit 1
 # COPY TO DESTINATION
 if [[ ! "$cwdInstall" ]]; then
   mkdir -p "${BINDIR}" || exit 1
-  ${CMDPREFIX} mv terraform "$BINDIR" || exit 1
+  ${CMDPREFIX} mv consul "$BINDIR" || exit 1
   # CLEANUP AND EXIT
   cd "${TMPDIR}" || exit 1
   rm -rf "${UTILTMPDIR}"
   [[ ! "$STREAMLINED" ]] && echo
-  echo "Terraform Version ${VERSION} installed to ${BINDIR}"
+  echo "Consul Version ${VERSION} installed to ${BINDIR}"
 else
   rm -f "$FILENAME" SHAFILE
-  echo "Terraform Version ${VERSION} downloaded"
+  echo "Consul Version ${VERSION} downloaded"
 fi
 
 exit 0
